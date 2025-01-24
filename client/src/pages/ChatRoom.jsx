@@ -6,31 +6,30 @@ const socket = io('http://localhost:5000');
 
 function ChatRoom() {
 
-    const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
+    const [message, setMessage] = useState("");
 
-    const locRoom = localStorage.getItem('room');
+    const locRoom = JSON.parse(localStorage.getItem('room'));
 
     useEffect(() => {
         if (!socket || !locRoom) return;
 
-        socket.emit('join_room', locRoom);
+        socket.emit('join_room', { room: locRoom.room, username: locRoom.username });
 
         socket.on('receive_message', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data.message]);
+            setMessages((prevMessages) => [...prevMessages, { message: data.message, username: data.username }]);
         });
 
         return () => {
             socket.off('receive_message');
         };
-
     }, [locRoom]);
 
     const handleMessage = (e) => {
         e.preventDefault();
         if (message.trim() === "") return;
-        setMessages((prevMessages) => [...prevMessages, message]);
-        socket.emit('send_message', { message, room: locRoom });
+        setMessages((prevMessages) => [...prevMessages, { message, username: locRoom.username }]);
+        socket.emit('send_message', { message, room: locRoom.room });
         setMessage("");
     };
 
@@ -48,9 +47,15 @@ function ChatRoom() {
 
             <div>
                 {messages.map((msg, index) => (
-                    <MessageCard key={index} message={msg} />
+                    <MessageCard
+                        key={index}
+                        message={msg.message}
+                        isSentByCurrentUser={msg.username === locRoom.username}
+                        otherUser={msg.username}
+                    />
                 ))}
             </div>
+
 
         </div>
     );

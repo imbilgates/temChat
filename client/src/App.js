@@ -6,6 +6,7 @@ function App() {
 
   const exitRoom = () => {
     localStorage.removeItem("room");
+    window.location.reload();
   };
 
   return (
