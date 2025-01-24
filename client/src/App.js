@@ -1,38 +1,21 @@
-import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000');
+import RoomJoin from './pages/RoomJoin';
+import ChatRoom from './pages/ChatRoom';
 
 function App() {
+  const locRoom = localStorage.getItem('room');
 
-  const [room, setRoom] = useState("");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState("");
-
-
-  useEffect(() => {
-    socket.on('receive_message', (data) => {
-      setMessages(data.message);
-    });
-  }, [message]);
-
-  const handleMessage = () => {
-    socket.emit('send_message',{ message, room});
-  }
-
-  const joinRoom = () => {
-    if (room === "") return;
-    socket.emit('join_room', room);
-  }
+  const exitRoom = () => {
+    localStorage.removeItem("room");
+  };
 
   return (
     <div className="App">
-      <h1>Welcome!</h1>
-      <input type="text" placeholder='Enter a room name' onChange={(e) => setRoom(e.target.value)} />
-      <button onClick={joinRoom}>Join</button> <br />
-      <input type="text" placeholder="message" onChange={(e) => setMessage(e.target.value)} />
-      <button onClick={handleMessage}>Send</button>
-      {messages}
+      <h1>Welcome! {locRoom && <button onClick={exitRoom}>Exit</button>}</h1>
+      {!locRoom ? (
+        <RoomJoin />
+      ) : (
+        <ChatRoom />
+      )}
     </div>
   );
 }
