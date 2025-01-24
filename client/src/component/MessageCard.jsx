@@ -8,7 +8,7 @@ function MessageCard({ message, isSentByCurrentUser, otherUser }) {
             }
         >
             <div style={styles.header}>
-                <b style={styles.username}>{isSentByCurrentUser === otherUser ? "you" : otherUser}</b>
+                <b style={styles.username}>{isSentByCurrentUser ? "you" : otherUser}</b>
             </div>
             <p style={styles.text}>{message}</p>
         </div>
