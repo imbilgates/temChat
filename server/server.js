@@ -1,17 +1,18 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const http = require('http');
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
+const path = require('path');
 
-
+const app = express();
 app.use(cors());
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: '*'
-    }
-})
+        origin: '*',
+    },
+});
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
@@ -35,7 +36,11 @@ io.on('connection', (socket) => {
     });
 });
 
-
+// Serve the client app
+app.use(express.static(path.join(__dirname, '../client', 'build')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client', 'build', 'index.html'));
+});
 
 server.listen(5000, () => {
     console.log('Server is running on port 5000');
