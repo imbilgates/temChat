@@ -19,8 +19,8 @@ function RoomJoin() {
     return (
         <div className="flex flex-col items-center mt-6 min-h-screen">
             <div className="bg-white shadow-lg rounded-2xl p-4 w-full max-w-sm">
-                <form action="" onSubmit={joinRoom}>
-                    <h1 className="text-2xl font-semibold text-center text-gray-800 mb-2">Join a Room</h1>
+                <h1 className="text-2xl font-semibold text-center text-gray-800 mb-2">Join a Room</h1>
+                <form onSubmit={joinRoom}>
                     <input
                         type="text"
                         placeholder="Enter a room name"

@@ -16,7 +16,7 @@ function App() {
       {locRoom && (
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-gray-800">
-            {locRoom.room}-Room
+          <b className="text-blue-600">{locRoom.room}</b>-Room
           </h3>
           <button
             onClick={exitRoom}
