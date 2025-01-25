@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import MessageCard from '../component/MessageCard';
 import { toast } from 'react-toastify';
 
-const socket = io('http://localhost:5000');
+const socket = io('https://tempchat-dn7j.onrender.com');
 
 function ChatRoom() {
     const [messages, setMessages] = useState([]);
