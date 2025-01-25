@@ -1,40 +1,56 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import io from 'socket.io-client';
 import MessageCard from '../component/MessageCard';
+import { toast } from 'react-toastify';
 
 const socket = io('http://localhost:5000');
 
 function ChatRoom() {
-
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
 
-    const locRoom = JSON.parse(localStorage.getItem('room'));
+    const locRoom = useRef(JSON.parse(localStorage.getItem('room')));
 
+    // Join room and set up socket listeners
     useEffect(() => {
-        if (!socket || !locRoom) return;
+        if (!socket || !locRoom.current) return;
 
-        socket.emit('join_room', { room: locRoom.room, username: locRoom.username });
+        const { room, username } = locRoom.current;
 
-        socket.on('receive_message', (data) => {
+        socket.emit('join_room', { room, username });
+
+        const handleReceiveMessage = (data) => {
             setMessages((prevMessages) => [...prevMessages, { message: data.message, username: data.username }]);
-        });
+        };
+
+        const handleUserJoined = (data) => {
+            toast(`${data.username} joined the room`);
+        };
+
+        socket.on('receive_message', handleReceiveMessage);
+        socket.on('user_joined', handleUserJoined);
 
         return () => {
-            socket.off('receive_message');
+            socket.off('receive_message', handleReceiveMessage);
+            socket.off('user_joined', handleUserJoined);
         };
-    }, [locRoom]);
+    }, []);
 
-    const handleMessage = (e) => {
-        e.preventDefault();
-        if (message.trim() === "") return;
-        setMessages((prevMessages) => [...prevMessages, { message, username: locRoom.username }]);
-        socket.emit('send_message', { message, room: locRoom.room });
-        setMessage("");
-    };
+    const handleMessage = useCallback(
+        (e) => {
+            e.preventDefault();
+            if (message.trim() === "") return;
+
+            const { username, room } = locRoom.current;
+
+            setMessages((prevMessages) => [...prevMessages, { message, username }]);
+            socket.emit('send_message', { message, room });
+            setMessage("");
+        },
+        [message]
+    );
 
     const scrollRef = useRef(null);
-
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -43,21 +59,21 @@ function ChatRoom() {
 
     return (
         <div className="flex flex-col h-100 p-4 bg-gray-100 mt-6">
-
-
-            <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 ">
+            <div
+                ref={scrollRef}
+                className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
+            >
                 {messages.map((msg, index) => (
                     <MessageCard
                         key={index}
                         message={msg.message}
-                        isSentByCurrentUser={msg.username === locRoom.username}
+                        isSentByCurrentUser={msg.username === locRoom.current.username}
                         otherUser={msg.username}
                     />
                 ))}
             </div>
 
             <form
-                action=""
                 onSubmit={handleMessage}
                 className="flex items-center space-x-2 p-2 rounded-lg"
             >
@@ -75,8 +91,6 @@ function ChatRoom() {
                     Send
                 </button>
             </form>
-
-
         </div>
     );
 }

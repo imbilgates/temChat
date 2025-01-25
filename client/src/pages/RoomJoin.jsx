@@ -11,7 +11,8 @@ function RoomJoin() {
             username
         };
         localStorage.setItem('room', JSON.stringify(data));
-        setRooms("");
+        setRooms("")
+        setUsername("")
         window.location.reload();
     };
 

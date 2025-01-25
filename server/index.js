@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
         socket.join(data.room);
         socket.username = data.username;
         console.log(`User with ID: ${socket.id} and username: ${socket.username} joined room: ${data.room}`);
+        socket.to(data.room).emit("user_joined", { id: socket.id, username: socket.username, room: data.room });
     });
 
     socket.on('send_message', (data) => {
@@ -36,6 +37,6 @@ io.on('connection', (socket) => {
 
 
 
-io.listen(5000, () => {
+server.listen(5000, () => {
     console.log('Server is running on port 5000');
 });

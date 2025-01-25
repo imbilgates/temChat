@@ -1,8 +1,10 @@
 import RoomJoin from './pages/RoomJoin';
 import ChatRoom from './pages/ChatRoom';
+import { ToastContainer } from 'react-toastify';
+import { useRef } from 'react';
 
 function App() {
-  const locRoom = JSON.parse(localStorage.getItem('room'));
+  const locRoom = useRef(JSON.parse(localStorage.getItem('room')));
 
   const exitRoom = () => {
     localStorage.removeItem("room");
@@ -11,6 +13,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 m-2">
+      <ToastContainer />
       {locRoom && (
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-gray-800">
