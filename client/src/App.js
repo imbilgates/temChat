@@ -10,15 +10,31 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {locRoom && <h3>{locRoom.room}-Room <button onClick={exitRoom}>Exit</button></h3>}
-      <h1>Welcome! <b>{locRoom && locRoom.username}</b></h1>
-      {!locRoom && <h3>Join a room to start chatting!</h3>}
-      {!locRoom ? (
-        <RoomJoin />
-      ) : (
-        <ChatRoom />
+    <div className="flex flex-col items-center justify-center p-4 m-2">
+      {locRoom && (
+        <div className="flex items-center space-x-2">
+          <h3 className="text-lg font-semibold text-gray-800">
+            {locRoom.room}-Room
+          </h3>
+          <button
+            onClick={exitRoom}
+            className="px-3 py-1 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded shadow"
+          >
+            Exit
+          </button>
+        </div>
       )}
+      <h1 className="text-2xl font-bold text-gray-900">
+        Welcome! <b className="text-blue-600">{locRoom && locRoom.username}</b>
+      </h1>
+      {!locRoom && (
+        <h3 className="text-lg text-gray-600">
+          Join a room to start chatting!
+        </h3>
+      )}
+      <div className="">
+        {!locRoom ? <RoomJoin /> : <ChatRoom />}
+      </div>
     </div>
   );
 }

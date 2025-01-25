@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import MessageCard from '../component/MessageCard';
 
@@ -33,19 +33,19 @@ function ChatRoom() {
         setMessage("");
     };
 
-    return (
-        <div>
-            <form action="" onSubmit={handleMessage}>
-                <input
-                    type="text"
-                    placeholder="Message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                />
-                <button type='submit'>Send</button>
-            </form>
+    const scrollRef = useRef(null);
 
-            <div>
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages]);
+
+    return (
+        <div className="flex flex-col h-100 p-4 bg-gray-100 mt-6">
+
+
+            <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 ">
                 {messages.map((msg, index) => (
                     <MessageCard
                         key={index}
@@ -55,6 +55,26 @@ function ChatRoom() {
                     />
                 ))}
             </div>
+
+            <form
+                action=""
+                onSubmit={handleMessage}
+                className="flex items-center space-x-2 p-2 rounded-lg"
+            >
+                <input
+                    type="text"
+                    placeholder="Message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="flex-1 p-2 border border-black rounded-lg bg-transparent text-black focus:outline-none focus:ring-2 focus:ring-black"
+                />
+                <button
+                    type="submit"
+                    className="px-4 py-2 border border-black text-black font-semibold rounded-lg bg-transparent hover:bg-black hover:text-white"
+                >
+                    Send
+                </button>
+            </form>
 
 
         </div>
