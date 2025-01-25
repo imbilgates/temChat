@@ -1,10 +1,9 @@
 import RoomJoin from './pages/RoomJoin';
 import ChatRoom from './pages/ChatRoom';
 import { ToastContainer } from 'react-toastify';
-import { useRef } from 'react';
 
 function App() {
-  const locRoom = useRef(JSON.parse(localStorage.getItem('room')));
+  const locRoom = JSON.parse(localStorage.getItem('room'));
 
   const exitRoom = () => {
     localStorage.removeItem("room");
