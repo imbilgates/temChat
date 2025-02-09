@@ -1,6 +1,8 @@
 import RoomJoin from './pages/RoomJoin';
 import ChatRoom from './pages/ChatRoom';
 import { ToastContainer } from 'react-toastify';
+import RandomJoin from './pages/RandomJoin';
+import { useState } from 'react';
 
 function App() {
   const locRoom = JSON.parse(localStorage.getItem('room'));
@@ -16,7 +18,7 @@ function App() {
       {locRoom && (
         <div className="flex items-center space-x-2">
           <h3 className="text-lg font-semibold text-gray-800">
-          <b className="text-blue-600">{locRoom.room}</b>-Room
+            <b className="text-blue-600">{locRoom.room.slice(locRoom.room.length - 5)+ "..."}</b>-Room
           </h3>
           <button
             onClick={exitRoom}
@@ -35,10 +37,33 @@ function App() {
         </h3>
       )}
       <div className="">
-        {!locRoom ? <RoomJoin /> : <ChatRoom />}
+        {!locRoom ? <RootLayout /> : <ChatRoom />}
       </div>
     </div>
   );
 }
 
 export default App;
+
+const RootLayout = () => {
+  const [toggle, setToggle] = useState(false);
+
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center">
+      <div className="relative">
+        {toggle ? <RoomJoin /> : <RandomJoin />}
+      </div>
+      <button
+        onClick={() => setToggle((prv) => !prv)}
+        className="fixed bottom-60 left-1/2 transform -translate-x-1/2 
+             cursor-pointer hover:blue-600 transition duration-300 z-50"
+      >
+        {toggle ? "Strangers Chat?" : "Room Chat?"}
+      </button>
+
+
+    </div>
+  );
+};
+
+

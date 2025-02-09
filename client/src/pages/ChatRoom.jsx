@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import io from 'socket.io-client';
+import { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import MessageCard from '../component/MessageCard';
 import { toast } from 'react-toastify';
-
-const socket = io('https://tempchat-dn7j.onrender.com');
+import { SocketContext } from '../contex/SocketContex'
 
 function ChatRoom() {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
+
+    const { socket } = useContext(SocketContext)
 
     const locRoom = useRef(JSON.parse(localStorage.getItem('room')));
 
