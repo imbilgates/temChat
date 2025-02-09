@@ -34,7 +34,7 @@ function ChatRoom() {
             socket.off('receive_message', handleReceiveMessage);
             socket.off('user_joined', handleUserJoined);
         };
-    }, []);
+    }, [socket]);
 
     const handleMessage = useCallback(
         (e) => {
@@ -47,7 +47,7 @@ function ChatRoom() {
             socket.emit('send_message', { message, room });
             setMessage("");
         },
-        [message]
+        [message, socket]
     );
 
     const scrollRef = useRef(null);
