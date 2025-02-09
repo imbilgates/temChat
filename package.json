@@ -5,11 +5,11 @@
   "main": "server/index.js",
   "author": "bilgates",
   "license": "MIT",
-  "scripts": {
-    "dev": "nodemon server/server.js",
-    "build": "npm install --prefix ./client && npm run build --prefix ./client && npm install",
-    "server": "node server/server.js"
-  },
+"scripts": {
+  "dev": "nodemon server/server.js",
+  "build": "cd client && npm install && npm run build && cd ..",
+  "server": "node server/server.js"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
