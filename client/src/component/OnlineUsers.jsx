@@ -27,7 +27,8 @@ export default function OnlineUsers() {
           <span className="absolute w-full h-full bg-green-500 rounded-full animate-pulse"></span>
           <span className="absolute w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800"></span>
         </div>
-        <h2 className="text-lg font-semibold">Online: {onlineUsers}</h2>
+        <h2 className="text-lg font-semibold">Online: {onlineUsers - 2}</h2>  
+        {/* -2 for server */}
       </div>
     </>
   );
