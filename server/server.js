@@ -83,10 +83,11 @@ io.on('connection', (socket) => {
 });
 
 // Serve the client app
-app.use(express.static(path.join(__dirname, '../client', 'dist')));
+app.use(express.static(path.resolve(__dirname, '../client/dist')));
 app.get('*', (_, res) => {
-    res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
 });
+
 
 server.listen(5000, () => {
     console.log('Server is running on port 5000');
