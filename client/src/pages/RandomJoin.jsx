@@ -8,7 +8,7 @@ function RandomJoin() {
 
     useEffect(() => {
         socket.on("chat_started", (data) => {
-            setIsLoading(false); // Stop loading once paired
+            setIsLoading(false);
             localStorage.setItem('room', JSON.stringify({ room: data.room, username }));
             window.location.reload();
         });
@@ -21,30 +21,29 @@ function RandomJoin() {
     const findPartner = (e) => {
         e.preventDefault();
         if (!username.trim()) return;
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         socket.emit("find_partner", username);
     };
 
     return (
-        <div className="flex flex-col items-center mt-6 min-h-screen">
-            <div className="bg-white shadow-lg rounded-2xl p-4 w-full max-w-sm">
-                <h1 className="text-2xl font-semibold text-center text-gray-800 mb-2">
-                    Talk With Strangers
-                </h1>
-                <form onSubmit={findPartner}>
+        <div className="flex flex-col items-center justify-center text-white px-4">
+            <div className="bg-gray-800 shadow-xl rounded-2xl p-10 w-full max-w-sm text-center border border-gray-700 relative overflow-hiddenn">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-20 blur-2xl" />
+                <h1 className="text-3xl font-bold mb-4 relative z-10">Talk With Strangers</h1>
+                <form onSubmit={findPartner} className="relative z-10">
                     <input
                         type="text"
                         placeholder="Enter a username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        disabled={isLoading} // Disable input when searching
+                        className="w-full px-4 py-2 mb-4 border border-gray-600 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        disabled={isLoading}
                     />
                     <button
                         type="submit"
-                        className={`w-full text-white font-semibold py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1
-                        ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"}`}
-                        disabled={isLoading} // Disable button while searching
+                        className={`w-full font-semibold py-2 rounded-lg focus:outline-none transition-all duration-300 text-white shadow-md 
+                        ${isLoading ? "bg-gray-600 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"}`}
+                        disabled={isLoading}
                     >
                         {isLoading ? "Finding a partner..." : "Find Partner"}
                     </button>
